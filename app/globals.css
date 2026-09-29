@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+@theme {
+  --color-phos: #33ff33;
+  --color-phos-dim: #1fc71f;
+  --color-phos-faint: #147a14;
+  --color-void: #050805;
+  --color-panel: #0a120a;
+  --font-term: var(--font-term), ui-monospace, monospace;
+}
+
+:root {
+  --phos: #33ff33;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #050805;
+  color: #33ff33;
+  font-family: var(--font-term), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+::selection {
+  background: #33ff33;
+  color: #050805;
+}
+
+/* thin green scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #147a14 #050805;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: #050805;
+}
+*::-webkit-scrollbar-thumb {
+  background: #147a14;
+  border-radius: 0;
+}
+
+/* CRT overlay: scanlines + vignette */
+.crt::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.22) 3px,
+    rgba(0, 0, 0, 0.22) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+.crt-off::after,
+.crt-off::before {
+  display: none;
+}
+
+/* visible keyboard focus */
+:focus-visible {
+  outline: 2px solid #33ff33;
+  outline-offset: 2px;
+}
+
+.crt::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.text-glow {
+  text-shadow:
+    0 0 6px rgba(51, 255, 51, 0.65),
+    0 0 24px rgba(51, 255, 51, 0.25);
+}
+
+.text-glow-soft {
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.35);
+}
+
+.panel-glow {
+  box-shadow:
+    0 0 0 1px rgba(51, 255, 51, 0.18),
+    0 0 32px rgba(51, 255, 51, 0.07),
+    inset 0 0 60px rgba(51, 255, 51, 0.03);
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  animation: blink 1.06s step-end infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blink {
+    animation: none;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.86;
+  }
+  99% {
+    opacity: 1;
+  }
+}
+.flicker {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .flicker {
+    animation: flicker 6s infinite;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise-in {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rise-in {
+    animation: rise-in 0.6s ease-out both;
+  }
+}
+
+@keyframes scan-drift {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+.ascii-art {
+  line-height: 1.05;
+  white-space: pre;
+}
+
+/* --- sigil core animations (motion gated) --- */
+.sigil-float,
+.sigil-spin,
+.sigil-spin-rev,
+.sigil-pop {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sigil-float {
+    animation: sigil-float 4s ease-in-out infinite;
+  }
+  .sigil-spin {
+    animation: sigil-spin 28s linear infinite;
+  }
+  .sigil-spin-rev {
+    animation: sigil-spin-rev 22s linear infinite;
+  }
+  .sigil-pop {
+    animation: sigil-pop 0.45s ease-out both;
+  }
+}
+
+@keyframes sigil-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes sigil-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sigil-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes sigil-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
